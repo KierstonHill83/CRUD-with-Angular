@@ -2,6 +2,8 @@ app.controller('BeerController', function($scope, httpFactory, $timeout) {
 
 	// $scope.beer = {};
 	$scope.success = false;
+	$scope.edit = false;
+	$scope.findBeer = "";
 
 	getBeers = function(url) {
 		httpFactory.get(url)
@@ -30,14 +32,39 @@ app.controller('BeerController', function($scope, httpFactory, $timeout) {
 		});
 	};
 
-	$scope.editBeer = function() {
-
+	$scope.editBeer = function(id) {
+		$scope.findBeer = '/api/v1/beer/' + id;
+		httpFactory.get($scope.findBeer)
+		.then(function(response) {
+			$scope.beer = response.data;
+			console.log($scope.beer);
+		});
+		$scope.edit = true;
 	};
 
-	$scope.removeBeer = function() {
-		httpFactory.delete('/api/v1/beer/' + response.data.id)
+	$scope.updateBeer = function() {
+		var update = $scope.beer;
+		httpFactory.put($scope.findBeer, update)
 		.then(function(response) {
 			console.log(response);
+			getBeers('/api/v1/beers');
+			$scope.beer = {};
+			$scope.edit = false;
+			$scope.success = true;
+			$scope.message = 'Edited the beer. Thanks!';
+			$timeout(messageTimeout, 3000);
+		});
+	};
+
+	$scope.removeBeer = function(id) {
+		$scope.findBeer = '/api/v1/beer/' + id;
+		httpFactory.delete($scope.findBeer)
+		.then(function(response) {
+			console.log(response);
+			getBeers('/api/v1/beers');
+			$scope.success = true;
+			$scope.message = 'Deleted the beer. Thanks!';
+			$timeout(messageTimeout, 3000);
 		});
 	};
 
