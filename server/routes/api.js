@@ -48,6 +48,7 @@ router.put('/beer/:id', function(req, res, next) {
     type: req.body.type,
     abv: parseFloat(req.body.abv)
   };
+  console.log(req.body);
   Beer.findByIdAndUpdate(req.params.id, update, function(err, data){
     if(err){
       res.json({'message': err});

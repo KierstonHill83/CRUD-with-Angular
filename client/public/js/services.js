@@ -13,13 +13,13 @@ app.factory('httpFactory', ['$http', function($http) {
 	};
 
 	// delete request
-	obj.delete = function(url, payload) {
-		return $http.delete(url, payload);
+	obj.delete = function(url) {
+		return $http.delete(url);
 	};
 
 	// put request
-	obj.put = function(url) {
-		return $http.put(url);
+	obj.put = function(url, payload) {
+		return $http.put(url, payload);
 	};
 
 	return obj;
